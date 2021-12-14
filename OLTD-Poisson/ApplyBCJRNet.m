@@ -38,8 +38,8 @@ bk1 =  ones(2,1,(len+1));  %bk
 % end
 for ii = len:-1:1
     
-    PkPost(:,:,ii) = exp(Apos.*LeBkP(ii))/(1 + exp(LeBkP(ii))).* gamma(:,:,ii); % Pk,gamma构成的P矩阵
-    
+    % PkPost(:,:,ii) = exp(Apos.*LeBkP(ii))/(1 + exp(LeBkP(ii))).* gamma(:,:,ii); % Pk,gamma构成的P矩阵
+    PkPost(:,:,ii) = gamma(:,:,ii); % Pk,gamma构成的P矩阵
     bk1(:,:,ii) = PkPost(:,:,ii)*bk1(:,:,ii+1);
     bk1(:,:,ii) = bk1(:,:,ii)/sum(bk1(:,:,ii));
     
@@ -52,12 +52,12 @@ Lcky(1) = log((fk'*(Apos.*Pkinit)*bk1(:,:,2))/(fk'*(Aneg.*Pkinit)*bk1(:,:,2)));
 
 for kk = 2 : len
     
-    gammakprior = exp(Apos.*LeBkP(kk-1))/(1 + exp(LeBkP(kk-1))); % P(xk=xi,j)
-    PkPrior = gammakprior.*gamma(:,:,kk-1);  % P,gamma构成的P矩阵
+    %gammakprior = exp(Apos.*LeBkP(kk-1))/(1 + exp(LeBkP(kk-1))); % P(xk=xi,j)
+    PkPrior = gamma(:,:,kk-1);  % P,gamma构成的P矩阵
     fk = PkPrior'*fk;   % 前向更新 fk
     fk = fk / sum(fk);
-    gammak = exp(Apos.*LeBkP(kk))/(1 + exp(LeBkP(kk)));
-    Pk=gammak.*gamma(:,:,kk);
+    %gammak = exp(Apos.*LeBkP(kk))/(1 + exp(LeBkP(kk)));
+    Pk=gamma(:,:,kk);
     
     Lcky(kk) = log(fk'*(Apos.*Pk)*bk1(:,:,kk+1)/(fk'*(Aneg.*Pk)*bk1(:,:,kk+1)));
 end
